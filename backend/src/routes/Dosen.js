@@ -15,5 +15,6 @@ router.post(
 router.delete('/delete/:NIP', DosenController.deleteDosenByNIP)
 router.get('/pengajar-nip', DosenController.getPengajarByNipDosen)
 router.get('/pengajar-kmta', DosenController.getPengajarByKMTA)
+router.get('/jabatan/:NIP', DosenController.getJabatanByNIP)
 
 export default router

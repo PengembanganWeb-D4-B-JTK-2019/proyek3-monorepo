@@ -4,11 +4,19 @@ import db from '../db'
 const Menjabat = db.define('Menjabat', {
   nip: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'Dosen',
+      key: 'nip'
+    }
   },
   id_jabatan: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'Jabatan',
+      key: 'id'
+    }
   }
 })
 Menjabat.removeAttribute('id')

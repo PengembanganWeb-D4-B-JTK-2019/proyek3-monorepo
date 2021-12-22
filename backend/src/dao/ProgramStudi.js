@@ -1,4 +1,4 @@
-import Prodi from '../../../postgres-database/src/models/Program_Studi'
+import Prodi from '@proyek3/postgres-database/models/Program_Studi'
 // import sequelize from '@proyek3/postgres-database/db'
 
 export const newProdi = async (kodeProdi, nip, kodeJurusan) => {

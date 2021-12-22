@@ -1,4 +1,4 @@
-import Kelas from '../../../postgres-database/src/models/Kelas'
+import Kelas from '@proyek3/postgres-database/models/Kelas'
 // import sequelize from '@proyek3/postgres-database/db'
 
 export const newKelas = async (kodeKelas, kodeProdi, nip, tahun) => {

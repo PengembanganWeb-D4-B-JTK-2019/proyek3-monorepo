@@ -1,4 +1,4 @@
-import Jurusan from '../../../postgres-database/src/models/Jurusan'
+import Jurusan from '@proyek3/postgres-database/models/Jurusan'
 // import sequelize from '@proyek3/postgres-database/db'
 
 export const newJurusan = async (kodeJurusan, nip) => {

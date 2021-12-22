@@ -1,4 +1,4 @@
-import mataKuliah from '../../../postgres-database/src/models/Mata_Kuliah'
+import mataKuliah from '@proyek3/postgres-database/models/Mata_Kuliah'
 // import sequelize from '@proyek3/postgres-database/db'
 
 export const newMataKuliah = async (

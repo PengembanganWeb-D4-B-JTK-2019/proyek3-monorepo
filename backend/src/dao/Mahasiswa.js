@@ -1,5 +1,5 @@
-import Mahasiswa from '../../../postgres-database/src/models/Mahasiswa'
-import sequelize from '../../../postgres-database/src/db'
+import Mahasiswa from '@proyek3/postgres-database/models/Mahasiswa'
+import sequelize from '@proyek3/postgres-database/db'
 
 export const getOneMahasiswaByNIM = async (NIM) => {
   try {

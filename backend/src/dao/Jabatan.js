@@ -1,4 +1,4 @@
-import Jabatan from '../../../postgres-database/src/models/Jabatan'
+import Jabatan from '@proyek3/postgres-database/models/Jabatan'
 // import sequelize from '@proyek3/postgres-database/db'
 
 export const newJabatan = async (id) => {

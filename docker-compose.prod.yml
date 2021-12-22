@@ -14,31 +14,16 @@ services:
     volumes:
       - ./.tmp/var/lib/postgresql/data:/var/lib/postgresql/data
       - ./postgres-database/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
-  service-penilaian:
-    image: service-penilaian
+  service-monitoring:
+    image: service-monitoring
     build:
-      context: ./service-penilaian
-      target: production
-      dockerfile: prod.Dockerfile
-    ports:
-      - "5002:5002"
-    volumes:
-      - ./service-penilaian:/usr/src/app
-      - /usr/src/app/node_modules
-    networks:
-      - default
-    depends_on:
-      - db
-  service-absensi:
-    image: service-absensi
-    build:
-      context: ./service-absensi
+      context: ./service-monitoring
       target: production
       dockerfile: prod.Dockerfile
     ports:
       - "5001:5001"
     volumes:
-      - ./service-absensi:/usr/src/app
+      - ./service-monitoring:/usr/src/app
       - /usr/src/app/node_modules
     networks:
       - default
@@ -95,7 +80,7 @@ services:
   backend:
     image: backend
     build:
-      context: ./backend
+      context: .
       dockerfile: prod.Dockerfile
     ports:
       - "14418:14418"

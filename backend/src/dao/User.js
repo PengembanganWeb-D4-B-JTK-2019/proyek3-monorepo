@@ -1,4 +1,4 @@
-import User from '../../../postgres-database/src/models/User'
+import User from '@proyek3/postgres-database/models/User'
 
 export const getFCMUser = async (userId) => {
   try {

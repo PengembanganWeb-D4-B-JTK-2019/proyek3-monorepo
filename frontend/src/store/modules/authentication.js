@@ -17,8 +17,10 @@ const authentication = {
     }
   },
 
-  
-getters: {
+  getters: {
+    // identity: state => {
+    //   return state.identity
+    // }
     identity: state => {
       console.log(state.identity)
       return {
@@ -28,10 +30,7 @@ getters: {
         preferred_username: "196009281994031000"
       }
     }
-
   },
-
-
 
   actions: {
     async authenticate ({ commit }, forceLogin = false) {

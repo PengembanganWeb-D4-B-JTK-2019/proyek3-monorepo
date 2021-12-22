@@ -1,14 +1,15 @@
-const mataKuliah = require('../../postgres-database/src/models/Mata_Kuliah')
-const programStudi = require('../../postgres-database/src/models/Program_Studi')
-const mahasiswa = require('../../postgres-database/src/models/Mahasiswa')
-const kelas = require('../../postgres-database/src/models/Kelas')
-const perkuliahan = require('../../postgres-database/src/models/Perkuliahan')
-const dosen = require('../../postgres-database/src/models/Dosen')
-const jabatan = require('../../postgres-database/src/models/Jabatan')
-const jurusan = require('../../postgres-database/src/models/Jurusan')
-const studi = require('./models/Studi')
+import mataKuliah from '@proyek3/postgres-database/models/Mata_Kuliah'
+import programStudi from '@proyek3/postgres-database/models/Program_Studi'
+import mahasiswa from '@proyek3/postgres-database/models/Mahasiswa'
+import kelas from '@proyek3/postgres-database/models/Kelas'
+import perkuliahan from '@proyek3/postgres-database/models/Perkuliahan'
+import dosen from '@proyek3/postgres-database/models/Dosen'
+import jabatan from '@proyek3/postgres-database/models/Jabatan'
+import jurusan from '@proyek3/postgres-database/models/Jurusan'
+import jadwal from '@proyek3/postgres-database/models/Jadwal'
+import studi from '@proyek3/postgres-database/models/Studi'
 
-const setAssociations = () => {
+export const setAssociations = () => {
   programStudi.hasMany(mataKuliah, {
     foreignKey: 'kode_program_studi'
   })
@@ -57,6 +58,18 @@ const setAssociations = () => {
   jurusan.hasMany(programStudi, {
     foreignKey: 'kode_jurusan'
   })
+  perkuliahan.hasMany(jadwal, {
+    foreignKey: 'id_perkuliahan'
+  })
+  dosen.belongsToMany(jabatan, {
+    through: 'Menjabat',
+    as: 'jabatan',
+    foreignKey: 'nip'
+  })
+  jabatan.belongsToMany(dosen, {
+    through: 'Menjabat',
+    as: 'dosen',
+    foreignKey: 'id_jabatan'
+  })
+  
 }
-
-module.exports = setAssociations

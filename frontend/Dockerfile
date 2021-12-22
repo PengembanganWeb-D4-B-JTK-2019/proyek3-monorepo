@@ -1,12 +1,5 @@
-FROM node:16-alpine as build
+FROM node:16-alpine3.14
 
-COPY . /usr/src/frontend
 WORKDIR /usr/src/frontend
 
-RUN npm ci \
- && npm run build
-
-FROM nginx:1-alpine
-
-COPY --from=build /usr/src/frontend/dist /usr/src/frontend
-COPY src/nginx.conf /etc/nginx/nginx.conf
+CMD ["./bootstrap.sh"]

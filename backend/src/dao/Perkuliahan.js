@@ -1,5 +1,5 @@
-import Perkuliahan from '../../../postgres-database/src/models/Perkuliahan'
-import sequelize from '../../../postgres-database/src/db'
+import Perkuliahan from '@proyek3/postgres-database/models/Perkuliahan'
+import sequelize from '@proyek3/postgres-database/db'
 
 export const getKuliahByIdTA = async (idKuliah, tahunAkademik) => {
   try {
