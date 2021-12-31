@@ -76,6 +76,15 @@
           >
             Download
           </v-btn>
+          <v-btn
+            class="ma-2 white--text"
+            :loading="loading"
+            :disabled="loading"
+            color="blue"
+            to="/penilaian/transkripsi-nilai/${Mahasiswa.id}"
+          >
+            test
+          </v-btn>
           </v-col>
     </v-row>
 
@@ -157,18 +166,22 @@ export default {
       ],
       id_perkuliahan: null,
       ListMataKuliah: [
+        "Semua Mata Kuliah",
         "Pengembangan Web",
         "Struktur Data dan Algoritma"
       ],
       ListKelas: [
+        "Semua Kelas",
         "3A",
         "3B"
       ],
       ListSemester: [
+        "Semua Semester",
         "1",
         "2"
       ],
       ListTahun: [
+        "Semua Tahun",
         JSON.stringify(["2021", "2022"]),
         JSON.stringify(["2022", "2023"])
       ],
@@ -289,6 +302,9 @@ export default {
       if (!this.MataKuliahFilterValue) {
         return true
       }
+      if (this.MataKuliahFilterValue === "Semua Mata Kuliah") {
+        return true
+      }
       // Check if the current loop value (The calories value)
       // equals to the selected value at the <v-select>.
       return val === this.MataKuliahFilterValue
@@ -296,6 +312,9 @@ export default {
     filterKelas (val) {
       // If this filter has no value we just skip the entire filter.
       if (!this.KelasFilterValue) {
+        return true
+      }
+      if (this.KelasFilterValue === "Semua Kelas") {
         return true
       }
       // Check if the current loop value (The calories value)
@@ -307,6 +326,9 @@ export default {
       if (!this.SemesterFilterValue) {
         return true
       }
+      if (this.SemesterFilterValue === "Semua Semester") {
+        return true
+      }
       // Check if the current loop value (The calories value)
       // equals to the selected value at the <v-select>.
       return val === this.SemesterFilterValue
@@ -314,6 +336,9 @@ export default {
     filterTahun (val) {
       // If this filter has no value we just skip the entire filter.
       if (!this.TahunFilterValue) {
+        return true
+      }
+      if (this.TahunFilterValue === "Semua Tahun") {
         return true
       }
       // Check if the current loop value (The calories value)
