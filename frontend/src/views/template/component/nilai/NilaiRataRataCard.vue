@@ -26,7 +26,7 @@ export default {
       type: Array,
       required: false,
       default: () => {
-        return [6, 7, 4, 7, 5]
+        return ["A", "A", "B", "A", "AB"]
       }
     }
   },
@@ -38,7 +38,8 @@ export default {
       return {
         series: [{
           name: "Nilai",
-          data: this.nilaiList
+          // data: [1, 1, 1, 1, 1]
+          data: [6, 7, 4, 7, 5]
         }],
         chartOptions: {
           colors: [this.currentTheme.colorSecondary, "#FB8C00", "#4CAF50", this.currentTheme.colorSecondaryVariant, "#2196F3"],
@@ -116,9 +117,23 @@ export default {
             labels: {
               colors: this.currentTheme.onSurface
             }
-          }
+          },
+          listNilai: ["A", "A", "B", "A", "AB"]
         }
       }
+    }
+  },
+  method: {
+    countNilai (item) {
+      if (item === "A" || item === "AB") this.series.data[0] += 1
+      else if (item === "B" || item === "BC") this.series.data[1] += 1
+      else if (item === "C" || item === "CD") this.series.data[2] += 1
+      else if (item === "D") this.series.data[3] += 1
+      else this.series.data[4] += 1
+    },
+    mounted () {
+      this.listNilai.forEach(this.countNilai)
+      // this.series.data = [3, 2, 1, 0, 1]
     }
   }
 }
