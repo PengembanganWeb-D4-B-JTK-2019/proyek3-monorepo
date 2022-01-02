@@ -147,3 +147,21 @@ export const getPengajarByKMTA = async (req, res, next) => {
     next(error)
   }
 }
+
+export const getJabatanByNIP = async (req, res, next) => {
+  try {
+    const { NIP } = req.params
+    const dosen = await DosenDAO.findJabatanByNIP(NIP)
+    const jabatan = dosen.jabatan.map((value) => {
+      return value.nama_jabatan;
+    })
+    res.status(200).json({
+      message: 'get jabatan by NIP sukses',
+      data: jabatan
+    })
+  } catch (error) {
+    next(error)
+  }
+  
+}
+

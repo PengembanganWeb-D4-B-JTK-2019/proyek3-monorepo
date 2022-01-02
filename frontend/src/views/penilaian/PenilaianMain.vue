@@ -53,7 +53,7 @@ export default {
       for (var i = 0; i < this.identity.realm_access.roles.length; i++) {
         if (this.identity.realm_access.roles[i] === "mahasiswa") {
           this.sideBarItems = [
-            { text: "Dashboard Nilai Mahasiswa", icon: "mdi-school-outline", to: "/penilaian/dashboard-nilai-mahasiswa" }
+            { text: "Dashboard Nilai Mahasiswa", icon: "mdi-school-outline", to: "/penilaian/dashboard-nilai-mahasiswa", class: "primary white--text title" }
           ]
         }
         if (this.identity.realm_access.roles[i] === "dosen") {

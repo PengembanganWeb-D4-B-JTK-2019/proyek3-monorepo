@@ -7,6 +7,7 @@ import { init as keycloakInit } from './keycloak'
 
 // import keycloak from './middleware/keycloak'
 import dosenRouter from './routes/Dosen'
+import jadwalRouter from './routes/Jadwal'
 import mahasiswaRouter from './routes/Mahasiswa'
 import userRouter from './routes/User'
 import perkuliahanRouter from './routes/Perkuliahan'
@@ -28,6 +29,7 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use('/dosen', dosenRouter)
+app.use('/jadwal', jadwalRouter)
 app.use('/mahasiswa', mahasiswaRouter)
 app.use('/user', userRouter)
 app.use('/kuliah', perkuliahanRouter)
