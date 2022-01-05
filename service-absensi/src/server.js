@@ -27,6 +27,7 @@ app.use('/api/daftar-hadir-dosen', daftarHadirDosenRoutes)
 app.use('/api/bap', bapRoutes)
 app.use('/api/mahasiswa', mahasiswaRoutes)
 app.use('/api/dosen', dosenRoutes)
+app.use(express.static('public'))
 
 // error handling
 app.use((error, req, res, next) => {

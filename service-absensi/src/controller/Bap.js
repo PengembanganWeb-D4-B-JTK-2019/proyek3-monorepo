@@ -85,7 +85,7 @@ export const updateBap = async (req, res, next) => {
   const { materi, kegiatan, bukti } = req.body
   try {
     const result = await DosenService.updateSatuBAP(id_bap, materi, kegiatan, bukti)
-    //const result = await DosenService.updateSatuBAP(id_bap, "3", "3", "3")
+    // const result = await DosenService.updateSatuBAP(id_bap, "3", "3", "3")
     res.json({
       message: `Memperbarui data BAP berdasarkan id : ${id_bap}`,
       data: result
@@ -106,7 +106,6 @@ export const createBap = async (req, res, next) => {
       })
     }
 
-    /*
     if (req.file === undefined) {
       // file undefined
       return res.status(400).json({
@@ -114,16 +113,13 @@ export const createBap = async (req, res, next) => {
         data: {}
       })
     }
-    */
 
     const { nip, materi, kegiatan, tanggal, idPerkuliahan, idJadwal } = req.body
 
     try {
-
       //const url = req.file.path
-      //const results = await DosenService.uploadBAP("196009281994031000", "cek", "cek", "cek", "2012-12-12", 2, 1)
-      
-      const url = "Bypassed - Error !"
+      const url = "coba tmp url"
+      //const results = await DosenService.uploadBAP("196009281994031000", "cek", "cek", "cek", "2069-11-29", 1, 2)
       const results = await DosenService.uploadBAP(nip, materi, kegiatan, url, tanggal, idPerkuliahan, idJadwal)
       const rows = results[0]
       res.json({
@@ -142,6 +138,19 @@ export const deleteBap = async (req, res, next) => {
     const result = await DosenService.delSatuBAP(id_bap)
     res.json({
       message: `Menghapus data BAP berdasarkan id : ${id_bap}`,
+      data: result
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getBapbyNIP = async (req, res, next) => {
+  const { NIP } = req.params
+  try {
+    const result = await DosenService.getSatuBAPbyNIP(NIP)
+    res.json({
+      message: `Mengambil data BAP berdasarkan NIP : ${NIP}`,
       data: result
     })
   } catch (error) {

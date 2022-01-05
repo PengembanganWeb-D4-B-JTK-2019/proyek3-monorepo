@@ -21,6 +21,9 @@ router.post('/new', BapController.createBap)
 router.delete('/delete/:id_bap', BapController.deleteBap)
 // http://localhost:5001/api/bap/delete/1
 
+router.get('/get-by-nip/:NIP', BapController.getBapbyNIP)
+// http://localhost:5001/api/bap/get-by-nip/195905211994031000
+
 // End of Line New Method From '19
 
 export default router

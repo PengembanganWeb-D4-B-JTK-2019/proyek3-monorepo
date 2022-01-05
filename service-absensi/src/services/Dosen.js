@@ -129,7 +129,7 @@ export const validasiKetidakhadiran = async (idKeterangan, isAccepted) => {
 // New Method From '19
 
 export const getSatuBAP = async (id_bap) => {
-  try{
+  try {
     const bap = await BapDAO.getBAPOne(id_bap)
     return bap
   } catch (error) {
@@ -138,7 +138,7 @@ export const getSatuBAP = async (id_bap) => {
 }
 
 export const updateSatuBAP = async (id_bap, materi, kegiatan, bukti) => {
-  try{
+  try {
     const bap = await BapDAO.updateBAPOne(id_bap, materi, kegiatan, bukti)
     return bap
   } catch (error) {
@@ -147,8 +147,17 @@ export const updateSatuBAP = async (id_bap, materi, kegiatan, bukti) => {
 }
 
 export const delSatuBAP = async (id_bap) => {
-  try{
+  try {
     const bap = await BapDAO.delBAPOne(id_bap)
+    return bap
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+export const getSatuBAPbyNIP = async (NIP) => {
+  try {
+    const bap = await BapDAO.getBAPOnebyNIP(NIP)
     return bap
   } catch (error) {
     return Promise.reject(error)

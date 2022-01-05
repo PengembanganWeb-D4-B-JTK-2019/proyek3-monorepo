@@ -69,4 +69,23 @@ export const delBAPOne = async (id_bap) => {
   }
 }
 
+export const getBAPOnebyNIP = async (NIP) => {
+  try {
+    const result = await db.query(`
+    SELECT *
+    FROM "Bap" bap
+    INNER JOIN "Dosen" dosen
+      ON dosen.nip = bap.nip
+    WHERE bap.nip = '${NIP}'
+
+;
+    `
+    )
+    const row = result[0]
+    return row
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 // End of Line New Method From '19

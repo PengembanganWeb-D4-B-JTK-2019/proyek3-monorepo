@@ -36,7 +36,7 @@
         > </DaftarHadir>
       </v-col>
     </v-row>
-    <v-row justify="center">
+    <v-row justify="center" class="mt-0">
       <v-col cols="auto">
         <AbsenCardDosen
           :jadwalDsn="jadwalDsn"

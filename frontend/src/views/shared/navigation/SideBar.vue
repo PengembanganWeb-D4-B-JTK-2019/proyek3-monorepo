@@ -220,7 +220,8 @@ export default {
   },
   methods: {
     logout: function () {
-      this.$store.dispatch("logout", this.$router)
+      this.$store.dispatch("deleteAuthStorage");
+      location.reload();
     },
     collapseSubItems () {
       this.isActive = false

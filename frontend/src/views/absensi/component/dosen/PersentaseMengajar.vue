@@ -7,22 +7,24 @@
             Rekap Presensi Dosen
           </h3>
         </div>
-        <v-virtual-scroll :items="items" :item-height="120" height="390">
+        <v-virtual-scroll :items="dataDsn" :item-height="120" height="390">
           <template v-slot:default="{ item }">
             <div class="flex-column mx-2 mt-2">
               <v-card-actions>
                 <v-row no-gutters align="center">
                   <v-col cols="8">
-                    <PersentaseMengajarModal :matakuliah="item.matkul" />
+                    <PersentaseMengajarModal
+                      :matakuliah="item.nama_mata_kuliah"
+                      :presensi="presensi"
+                    />
                     <v-progress-linear
                       class="mr-3 pa-0"
                       id="rounded-bar"
                       :height="25"
-                      :value="item.percent"
+                      :value="item.persen_mengajar_matkul"
                       color="#59DCDC"
                       background-color="#DADADA"
                     >
-                      <!-- :value="persentaseMengajar.persentaseJamMengajarDosen" -->
                     </v-progress-linear>
                   </v-col>
                   <v-col cols="4">
@@ -38,7 +40,7 @@
                       "
                       id="dark-blue"
                       ><h1 class="font-weight-black">
-                        {{ item.percent }}%
+                        {{ item.persen_mengajar_matkul }}%
                       </h1></v-card-text
                     >
                     <v-card-text
@@ -86,56 +88,66 @@
 <script>
 import { mapGetters } from "vuex";
 import PersentaseMengajarModal from "./PersentaseMengajarModal.vue";
+import {
+  presensiMengajar,
+  dataDosen
+} from "../../../../datasource/network/absensi/dashboardDosen.js";
 
 export default {
   name: "PersentaseMengajar",
   components: {
-    PersentaseMengajarModal,
+    PersentaseMengajarModal
   },
   data() {
     return {
-      persenTidakMengajar: 0,
-      items: [
-        {
-          matkul: "PCD TE",
-          percent: "60",
-        },
-        {
-          matkul: "PCD TE",
-          percent: "60",
-        },
-        {
-          matkul: "PCD TE",
-          percent: "60",
-        },
-        {
-          matkul: "PCD TE",
-          percent: "60",
-        },
-        {
-          matkul: "PCD TE",
-          percent: "60",
-        },
-        {
-          matkul: "PCD TE",
-          percent: "60",
-        },
-      ],
+      dataDsnTemp: [],
+      dataDsn: [],
+      presensi: []
     };
   },
-  props: {
-    persentaseMengajar: {
-      type: Object,
-      default() {
-        return {};
-      },
+  async created() {
+    await this.hitungPersentasePerMatkul();
+    this.$nextTick(() => {
+      this.dataDsn = this.dataDsnTemp;
+    });
+  },
+  methods: {
+    async getDataDosen() {
+      const result = await dataDosen(this.identity.preferred_username);
+      this.dataDsnTemp = result.data.dosen;
     },
+    async getPresensiMatkul() {
+      const result = await presensiMengajar(this.identity.preferred_username);
+      this.presensi = result.data.presensi;
+    },
+    async hitungPersentasePerMatkul() {
+      await this.getDataDosen();
+      await this.getPresensiMatkul();
+      for (let i = 0; i < this.dataDsnTemp.length; i++) {
+        let jumlahMengajar = 0;
+        let counterMatkul = 0;
+        for (let j = 0; j < this.presensi.length; j++) {
+          if (this.dataDsnTemp[i].id === this.presensi[j].id) {
+            counterMatkul++;
+            if (this.presensi[j].isHadir === true) {
+              jumlahMengajar++;
+            }
+          }
+        }
+        this.dataDsnTemp[i].persen_mengajar_matkul = Math.round(
+          (jumlahMengajar / counterMatkul) * 100
+        );
+      }
+    }
   },
 
   computed: {
     ...mapGetters({
-      currentTheme: "theme/getCurrentColor",
+      currentTheme: "theme/getCurrentColor"
     }),
-  },
+    identity: function() {
+      return this.$store.getters.identity;
+    }
+  }
 };
 </script>

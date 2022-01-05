@@ -28,7 +28,8 @@
                 {{ perkuliahan.kelas.kode_kelas }}
               </p>
               <p>
-                <span class="font-weight-bold">Jumlah Mhs</span>: {{ "27" }}
+                <span class="font-weight-bold">Jumlah Mhs</span>:
+                {{ bap.jumlah_mhs_hadir + bap.jumlah_mhs_tidak_hadir }}
               </p>
               <p>
                 <span class="font-weight-bold">Tanggal</span>: {{ currentDate }}
@@ -37,14 +38,14 @@
             <div class="mb-4">
               <p class="mb-1 font-weight-bold">Materi</p>
               <div class="grey lighten-2 pa-2">
-                <p class="ma-0">Web Responsive</p>
+                <p class="ma-0">{{ bap.materi }}</p>
               </div>
             </div>
             <div class="mb-4">
               <p class="mb-1 font-weight-bold">Kegiatan Mahasiswa</p>
               <div class="grey lighten-2 pa-2">
                 <ol>
-                  <li v-for="(item, index) in tempKegiatan" :key="index">
+                  <li v-for="(item, index) in bap.kegiatan" :key="index">
                     {{ item }}
                   </li>
                 </ol>
@@ -57,14 +58,34 @@
             <div class="mb-4">
               <p class="mb-1 font-weight-bold">Kehadiran</p>
               <div class="grey lighten-2 pa-2">
-                <p class="ma-0">Hadir : {{ 27 }}</p>
-                <p class="ma-0">Tidak hadir : {{ 0 }}</p>
+                <p class="ma-0">Hadir : {{ bap.jumlah_mhs_hadir }}</p>
+                <p class="ma-0">
+                  Tidak hadir : {{ bap.jumlah_mhs_tidak_hadir }}
+                </p>
               </div>
             </div>
             <div class="d-flex justify-end mt-16 action-btn">
-              <v-btn color="#2196F3" dark class="pl-8 pr-8 mr-2" @click="submitBAP()">Export PDF</v-btn>
-              <v-btn color="#FB8C00" dark class="pl-8 pr-8 mr-2" @click="submitBAP()">Edit</v-btn>
-              <v-btn color="#00C853" dark class="pl-8 pr-8" @click="submitBAP()">Done</v-btn>
+              <v-btn
+                color="#2196F3"
+                dark
+                class="pl-8 pr-8 mr-2"
+                @click="submitBAP()"
+                >Export PDF</v-btn
+              >
+              <v-btn
+                color="#FB8C00"
+                dark
+                class="pl-8 pr-8 mr-2"
+                @click="toogleEdit()"
+                >Edit</v-btn
+              >
+              <v-btn
+                color="#00C853"
+                dark
+                class="pl-8 pr-8"
+                @click="dialog.value = false"
+                >Done</v-btn
+              >
             </div>
           </v-container>
           <v-form v-else>
@@ -112,11 +133,27 @@
                   :multiple="true"
                 ></Upload>
               </div>
-              <div class="d-flex justify-end mt-16">
+              <div class="d-flex justify-end mt-16 action-btn" v-if="editMode">
                 <v-btn
                   color="#00C853"
                   dark
+                  class="pl-8 pr-8 mr-2"
+                  @click="handleEditBAP()"
+                  >Save</v-btn
+                >
+                <v-btn
+                  color="#cfcfcf"
+                  light
                   class="pl-8 pr-8"
+                  @click="unToogleEdit()"
+                  >Cancel</v-btn
+                >
+              </div>
+              <div class="d-flex justify-end mt-16 action-btn" v-else>
+                <v-btn
+                  color="#00C853"
+                  dark
+                  class="pl-8 pr-8 mr-2"
                   @click="submitBAP()"
                   >Save</v-btn
                 >
@@ -140,7 +177,7 @@
     flex-direction: column;
     margin-top: 1rem !important;
   }
-  .action-btn>button {
+  .action-btn > button {
     margin: 0 !important;
     margin-bottom: 1rem !important;
   }
@@ -159,22 +196,24 @@ export default {
       type: Array,
       default() {
         return {};
-      },
-    },
+      }
+    }
   },
   data() {
     return {
       materi: "",
       kegiatan: [
         {
-          value: "",
-        },
+          value: ""
+        }
       ],
       tempKegiatan: ["Alex pusing", "Salman bingung", "Faza tidur"],
       buktiKuliah: [],
       kehadiranMhs: [],
+      bap: {},
       currentDate: new Date().toISOString().substr(0, 10),
       statusBAP: false,
+      editMode: false
     };
   },
   methods: {
@@ -202,24 +241,23 @@ export default {
     async submitBAP() {
       await this.getKehadiran();
 
-      const hadir = this.kehadiranMhs.filter(
-        (item) => item.isHadir === true
-      ).length;
+      const hadir = this.kehadiranMhs.filter(item => item.isHadir === true)
+        .length;
       const tidak_hadir = this.kehadiranMhs.length - hadir;
 
-      console.log(this.perkuliahan);
-
-      console.log(this.buktiKuliah);
       const fileData = new FormData();
       fileData.append("bap-bukti", this.buktiKuliah[0]);
-      fileData.append("tanggal",  this.currentDate);
+      fileData.append("tanggal", this.currentDate);
       fileData.append("nip", this.identity.preferred_username);
       fileData.append("idJadwal", this.perkuliahan.id_jadwal);
-      fileData.append("idPerkuliahan", this.perkuliahan.id_perkuliahan);
+      fileData.append("idPerkuliahan", this.perkuliahan.id_jadwal);
       fileData.append("materi", this.materi);
-      fileData.append("kegiatan", this.kegiatan.map((item) => {
-        return item.value;
-        }));
+      fileData.append(
+        "kegiatan",
+        this.kegiatan.map(item => {
+          return item.value;
+        })
+      );
       fileData.append("hadir", hadir);
       fileData.append("tidak_hadir", tidak_hadir);
 
@@ -236,29 +274,79 @@ export default {
       //   hadir,
       //   tidak_hadir,
       // };
-      const BAP = fileData
+      const BAP = fileData;
 
       for (var pair of fileData.entries()) {
-        console.log(pair[0]+ ", " + pair[1]); 
+        console.log(pair[0] + ", " + pair[1]);
       }
       try {
-        const response = await bapApi.getBAP(this.perkuliahan.id_perkuliahan, this.currentDate);
-        console.log(response);
+        await bapApi.postBAP(BAP);
+        await this.fetchData();
+        this.statusBAP = true;
       } catch (error) {
         console.log(error);
       }
     },
+    async fetchData() {
+      try {
+        const response = await bapApi.getBAP(
+          this.perkuliahan.id_jadwal,
+          this.currentDate
+        );
+        if (response) {
+          this.bap = response.data.bap;
+          this.bap.kegiatan = this.bap.kegiatan.split(",");
+          this.materi = this.bap.materi;
+          this.kegiatan = this.bap.kegiatan.map(e => {
+            return { value: e };
+          });
+          console.log(this.bap);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    toogleEdit() {
+      this.editMode = true;
+      this.statusBAP = false;
+    },
+    unToogleEdit() {
+      this.editMode = false;
+      this.statusBAP = true;
+    },
+    async handleEditBAP() {
+      const BAP = {
+        materi: this.materi,
+        kegiatan: this.kegiatan.map(item => {
+          return item.value;
+        }),
+        bukti: this.bap.bukti
+      };
+      try {
+        await bapApi.updateBAP(this.bap.id_BAP, BAP);
+        await this.fetchData();
+        this.unToogleEdit();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  },
+  async created() {
+    await this.fetchData();
+    if (Object.keys(this.bap).length !== 0) {
+      this.statusBAP = true;
+    }
   },
   components: {
-    Upload,
+    Upload
   },
   computed: {
     ...mapGetters({
-      currentTheme: "theme/getCurrentColor",
+      currentTheme: "theme/getCurrentColor"
     }),
-    identity: function () {
+    identity: function() {
       return this.$store.getters.identity;
-    },
-  },
+    }
+  }
 };
 </script>
