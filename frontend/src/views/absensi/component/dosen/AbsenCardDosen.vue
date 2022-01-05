@@ -95,7 +95,8 @@
                 Kehadiran Mahasiswa</v-btn
               >
             </v-card-actions>
-          </v-card>
+            </v-card>
+          </v-hover>
         </v-col>
       </v-slide-item>
     </v-slide-group>
