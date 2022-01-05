@@ -308,7 +308,7 @@ export default {
   async mounted () {
     const identity = this.$store.getters.identity
     this.Mahasiswa.Nim = identity.preferred_username
-    var dataMhs = await NilaiAkhir.getNilaiAkhirMhs(this.$store.getters.identity.preferred_username)
+    var dataMhs = await NilaiAkhir.getNilaiAkhirMhs(181524001)
     this.Mahasiswa.Nama = dataMhs.Mahasiswa.nama
     this.Mahasiswa.Kelas = dataMhs.Mahasiswa.kode_kelas
     this.Mahasiswa.Nilai = dataMhs.Nilai

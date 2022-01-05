@@ -6,7 +6,8 @@
     <v-col cols="12">
       <breadcumbs :breadcrumb-items="breadcrumbItems" />
     </v-col>
-
+<v-row>
+  <v-col cols="12">
     <div :style="isMobile ? `display: block` : `display: flex; justify-content: space-around`">
       <div>
           <v-select
@@ -45,14 +46,17 @@
           ></v-select>
       </div>
     </div>
+    </v-col>
+    
+    </v-row>
 
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <p class="text-left font-weight-bold text-h5"
           :style="{color: currentTheme.onBackground}">List Rekap Nilai
         </p>
        </v-col>
-         <v-col cols="14" class="text-right">
+         <v-col cols="12" class="text-right">
           <v-btn
             class="ma-2 white--text"
             :loading="loading"
@@ -63,9 +67,6 @@
             Download Template
           </v-btn>
           </v-col>
-    </v-row>
-
-    <v-row>
       <v-col>
         <template>
           <v-data-table
@@ -78,6 +79,11 @@
           >
           </v-data-table>
         </template>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        
       </v-col>
     </v-row>
 
@@ -407,6 +413,7 @@ import Breadcumbs from "@/views/shared/navigation/Breadcumbs"
 // import NilaiMataKuliah from "@/views/penilaian/component/dosen/NilaiMataKuliah"
 // import KelasItem from "@/views/template/component/absensi/KelasItem"
 import DosenAPI from "@/datasource/network/penilaian/PenilaianDosen"
+
 // import { PENILAIAN_API_URL } from "../../../../config"
 
 export default {
@@ -438,12 +445,13 @@ export default {
         // { id_matkul: 2, Matkul: "Pengantar Angkungtangsi" }
       ],
       id_perkuliahan: null,
-      ListMataKuliah: ["Pengembangan Web", "Struktur Data dan Algoritma"],
-      ListKelas: ["3A", "3B"],
-      ListSemester: ["1", "2"],
+      ListMataKuliah: ["Pengembangan Web", "Struktur Data dan Algoritma",""],
+      ListKelas: ["3A", "3B",""],
+      ListSemester: ["1", "2",""],
       ListTahun: [
         JSON.stringify(["2021", "2022"]),
-        JSON.stringify(["2022", "2023"])
+        JSON.stringify(["2022", "2023"]),
+        ""
       ],
       desserts: [
         {
@@ -831,6 +839,10 @@ export default {
     }
   },
   methods: {
+    async fetchAllNilaiMahasiswa() {
+      const response = await DosenAPI.getAllNilaiMahasiswa(6);
+      this.nilai_mahasiswa = response.data;
+    },
     async getMatkulbyKelas(kodeKelas, index) {
       // console.log(kodeKelas)
       const matkul = await DosenAPI.getMatkul(this.nip, kodeKelas.kode_kelas);
@@ -1042,6 +1054,7 @@ export default {
     this.nip = identity.preferred_username; // "196610181995121000"
     const kelas = await DosenAPI.getKelas(this.nip);
     this.listKelas = kelas.uniqueClass;
+    await this.fetchAllNilaiMahasiswa();
   }
 };
 </script>

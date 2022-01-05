@@ -60,10 +60,22 @@ const updateNilaiAkhir = async (listNilaiFinal, idPerkuliahan) => {
   }
 }
 
+const getAllNilaiMahasiswa = async (idPerkuliahan) => {
+  try {
+    const penilaianURL = PENILAIAN_URL + `/get-nilai/perkuliahan/${idPerkuliahan}`
+    const result = await baseHttp.get(penilaianURL)
+    var dataNilai = result.data.data
+    return dataNilai
+  } catch (e) {
+    return await errorHandler(e)
+  }
+}
+
 export default {
   getNilaiAkhir,
   getKelas,
   getMatkul,
   importNilai,
-  updateNilaiAkhir
+  updateNilaiAkhir,
+  getAllNilaiMahasiswa
 }
