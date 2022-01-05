@@ -11,6 +11,16 @@ const persentaseMengajar = async (nip) => {
   }
 }
 
+export const rekapPresensiMhs = async id_mata_kuliah => {
+  try {
+    const dataMhs = `api/mahasiswa/dosen-mhs-matkul/get/${id_mata_kuliah}`;
+    const result = await baseHttp.get(dataMhs, {}, { timeout: 3000 });
+    return result.data;
+  } catch (err) {
+    console.erroe(err);
+  }
+}
+
 export default {
   persentaseMengajar
 }
